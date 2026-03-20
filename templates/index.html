@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AI Disease Prediction System</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #eef2f7, #dfe7f5);
+            margin: 0;
+            padding: 0;
+        }
+
+        .navbar {
+            width: 100%;
+            background: rgba(79, 109, 245, 0.95);
+            padding: 25px 20px 25px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.671);
+            position: fixed;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .nav-title {
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        
+        .nav-links a {
+            color: rgb(255, 255, 255);
+            text-decoration: none;
+            font-size: 22px;
+            padding: 8px 40px;
+            border-radius: 6px;
+            transition: 0.3s;
+        }
+
+        .nav-links a:hover {
+            background: rgba(255, 255, 255, 0.578);
+            color: black;
+        }
+
+        .container {
+            width: 65%;
+            margin: auto;
+            margin-top: 150px;
+            background: white;
+            padding: 40px;
+            border-radius: 14px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.379);
+            text-align: center;
+        }
+
+        .title {
+            font-size: 28px;
+            font-weight: bold;
+            background: #f7f9fc;
+            color: #444;
+            padding: 15px;
+            border-radius: 8px;
+            width: 85%;
+            display:inline-block;
+        }
+
+        .subtitle {color: #555; margin-bottom: 30px;}
+
+        textarea {
+            width: 85%;
+            height: 65px;
+            font-size: 15px;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            resize: none;
+            outline: none;
+        }
+
+        textarea:focus {
+            border: 1px solid #3785ea;
+            box-shadow: 0 0 5px rgba(55, 133, 234, 0.4);
+        }
+
+        .instructions {
+            width: 85%;
+            background: #f7f9fc;
+            color: #444;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            display:inline-block;
+        }
+
+        .controls {
+            width: 89%;
+            margin: auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 15px;
+        }
+
+        select {
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            font-size: 14px;
+            width: 48%;
+        }
+
+        button {
+            padding: 12px 28px;
+            font-size: 16px;
+            background: #4f6df5;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .predict_btn {width: 48%;}
+
+        button:hover {background: #2f4de0;}
+
+        .toast {
+            position: fixed;
+            top: 20px;
+            left: 31%;
+            transform: translate(0%, -40px);
+            min-width: 35%;
+            padding: 18px 20px;
+            text-align: center;
+            border-radius: 10px;
+            color: white;
+            font-size: 18px;
+            background: #e74c3c;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+            opacity: 0;
+            transition: all 0.4s ease;
+            z-index: 1000;
+        }
+
+        .toast.show {opacity: 1; transform: translate(0%, 0);}
+        .toast.success {background: #2ecc71;}
+        .toast.error {background: #e74c3c;}
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.4);
+        }
+
+        .modal-box {
+            background: white;
+            width: 300px;
+            padding: 30px;
+            margin: 120px auto;
+            border-radius: 12px;
+            text-align: center;
+            position: relative;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+        .modal-box h2 {margin-bottom: 20px;}
+        .modal-box input {
+            width: 90%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+        }
+
+        .modal-box button {width: 95%; margin-top: 10px;}
+        .close {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 22px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="navbar">
+        <div class="nav-title">AI Health Prediction System</div>
+        <div class="nav-links">
+            <a href="/">Home</a>
+            <a href="#" onclick="openLogin()">History</a>
+        </div>
+    </div>
+
+    <div id="loginModal" class="modal">
+    <div class="modal-box">
+        <form action="/admin_login" method="post">
+            <h2>Admin Login</h2>
+
+            <input type="text" name="username" placeholder="Username" required>
+            <input type="password" name="password" placeholder="Password" required>
+
+            <button type="submit">Login</button>
+        </form>
+
+        <span class="close" onclick="closeLogin()">×</span>
+    </div>
+</div>
+
+    <div id="toast" class="toast"></div>
+    <div class="container">
+        <div class="title">Diabetes and Heart Disease Risk Prediction model</div>
+        <div class="subtitle"></div>
+        <div class="instructions">Enter <b>36 comma-separated values</b> including <b>patient_id</b> and medical features.</div>
+        <form id="predictionForm" action="/predict" method="post">
+            <textarea id="patientInput" name="patient_data"
+                placeholder="Example:861,1.004,0.006,1.006,0.995,..."></textarea>
+
+            <div class="controls">
+                <select>
+                    <option disabled selected>Feature Order</option>
+                    <option>1. Patient id</option>
+                    <option>2. Age</option>
+                    <option>3. Sex</option>
+                    <option>4. Smoking</option>
+                    <option>5. Alcohol Consumption</option>
+                    <option>6. Physical Activity</option>
+                    <option>7. Obesity</option>
+                    <option>8. Radiation Exposure</option>
+                    <option>9. Blood pressure</option>
+                    <option>10. Cholesterol</option>
+                    <option>11. Blood Sugar</option>
+                    <option>12. Bmi</option>
+                    <option>13. Resting HeartRate</option>
+                    <option>14. ECG Results</option>
+                    <option>15. Exercise Induced Angina</option>
+                    <option>16. C Reactive Protein</option>
+                    <option>17. Triglycerides</option>
+                    <option>18. Ldl</option>
+                    <option>19. Hdl</option>
+                    <option>20. PSA Level</option>
+                    <option>21. ca125 Level</option>
+                    <option>22. afp Level</option>
+                    <option>23. cea Level</option>
+                    <option>24. BRCA1 Mutation</option>
+                    <option>25. BRCA2 Mutation</option>
+                    <option>26. TP53 Mutation</option>
+                    <option>27. KRAS Mutation</option>
+                    <option>28. EGFR Mutation</option>
+                    <option>29. LDLR Variant</option>
+                    <option>30. APOE Variant</option>
+                    <option>31. MYH7 Variant</option>
+                    <option>32. PCSK9 Variant</option>
+                    <option>33. snp Risk Score</option>
+                    <option>34. Gene Expression Score</option>
+                    <option>35. Polygenic Risk Score</option>
+                    <option>36. Family History Heart</option>
+                </select>
+                <button class="predict_btn" type="submit">Predict Risk</button>
+            </div>
+        </form>
+        <form action="/admin_login" method="post"></form>
+    </div>
+
+    <script>
+        function showToast(message, type="error") {
+            let toast = document.getElementById("toast");
+            clearTimeout(toast.hideTimeout);
+            toast.classList.remove("show");
+
+            setTimeout(() => {
+                void toast.offsetWidth;
+                toast.innerText = message;
+                toast.className = "toast " + type + " show";
+
+                toast.hideTimeout = setTimeout(() => {
+                    toast.classList.remove("show");
+                }, 1500);
+            }, 50);
+        }
+
+        function openLogin() {
+            document.getElementById("loginModal").style.display = "block";
+        }
+
+        function closeLogin() {
+            document.getElementById("loginModal").style.display = "none";
+        }
+
+        document.getElementById("predictionForm").addEventListener("submit", function(e) {
+            let input = document.getElementById("patientInput").value.trim();
+            let values = input.split(",").filter(v => v.trim() !== "");
+
+            if (values.length !== 36) {
+                e.preventDefault();
+                showToast("Enter exactly 36 values. You entered: " + values.length, "error");
+                return;
+            }
+
+            for (let i = 0; i < values.length; i++) {
+                if (isNaN(values[i])) {
+                    e.preventDefault();
+                    showToast("Invalid value at position " + (i+1), "error");
+                    return;
+                }
+            }
+
+            showToast("Processing prediction...", "success");
+        });
+        </script>
+</body>
+</html>

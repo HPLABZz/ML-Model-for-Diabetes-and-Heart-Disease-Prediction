@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Prediction History</title>
+    <style>
+        body { font-family: Arial; background: #f5f7fa; }
+
+        table {
+            border-collapse: collapse;
+            width: 80%;
+            margin: auto;
+            margin-top: 50px;
+            background: white;
+        }
+
+        th, td {
+            padding: 12px;
+            border: 1px solid #ddd;
+            text-align: center;
+        }
+
+        th {
+            background: #4f6df5;
+            color: white;
+        }
+
+        .delete-btn {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .delete-btn:hover {
+            background: #c0392b;
+        }
+    </style>
+</head>
+
+<body>
+
+<h2 style="text-align:center;">Prediction History</h2>
+
+<table>
+    <tr>
+        <th>SNo.</th>
+        <th>Patient ID</th>
+        <th>Heart Risk</th>
+        <th>Diabetes Risk</th>
+        <th>Heart Level</th>
+        <th>Diabetes Level</th>
+        <th>Date</th>
+        <th>Delete</th>
+    </tr>
+
+    {% for row in data %}
+    <tr>
+        <td class="serial">{{loop.index}}</td>
+        <td>{{row[1]}}</td>
+        <td>{{row[2]}} %</td>
+        <td>{{row[3]}} %</td>
+        <td>{{row[4]}}</td>
+        <td>{{row[5]}}</td>
+        <td>{{row[6]}}</td>
+
+        <td>
+            <button class="delete-btn" onclick="deleteRow({{row[0]}}, this)">
+                Delete
+            </button>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+
+<script>
+function deleteRow(id, btn) {
+    if (!confirm("Delete this record?")) return;
+
+    fetch(`/delete/${id}`, {
+        method: "DELETE"
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.success) {
+            btn.closest("tr").remove();
+
+            updateSerialNumbers();
+        } else {
+            alert("Delete failed");
+        }
+    })
+    .catch(() => alert("Error deleting record"));
+}
+
+function updateSerialNumbers() {
+    let rows = document.querySelectorAll("table tr");
+
+    for (let i = 1; i < rows.length; i++) {
+        let serialCell = rows[i].querySelector(".serial");
+        if (serialCell) {
+            serialCell.innerText = i;
+        }
+    }
+}
+</script>
+
+</body>
+</html>
