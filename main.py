@@ -1,8 +1,8 @@
 import pandas as pd
-import joblib
-from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
+from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score
+import joblib
 
 dataset = pd.read_csv("dataset/biomedical heart and diabetes dataset.csv")
 X = dataset.drop(["heart_disease","diabetes_risk","patient_id"], axis=1)

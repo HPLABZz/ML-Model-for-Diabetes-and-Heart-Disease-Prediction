@@ -1,189 +1,152 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
     <title>AI Disease Prediction System</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: linear-gradient(135deg, #eef2f7, #dfe7f5);
-            margin: 0;
-            padding: 0;
-        }
 
-        .navbar {
-            width: 100%;
-            background: rgba(79, 109, 245, 0.95);
-            padding: 25px 20px 25px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.671);
-            position: fixed;
-            top: 0;
-            z-index: 1000;
-        }
+    * {box-sizing: border-box;}
+    body {
+        font-family: 'Segoe UI', Arial, sans-serif;
+        background: linear-gradient(135deg, #eef2f7, #dfe7f5);
+        margin: 0;
+        padding: 0;
+    }
+    .navbar {
+        width: 100%;
+        background: linear-gradient(135deg, #4f6df5, #6c8cff);
+        padding: 16px 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+        position: fixed;
+        top: 0;
+        z-index: 1000;
+    }
+    .nav-title {color: white; font-size: 20px; font-weight: 600;}
+    .nav-links a {
+        color: white;
+        text-decoration: none;
+        font-size: 15px;
+        margin-left: 10px;
+        padding: 6px 12px;
+        border-radius: 8px;
+        transition: 0.3s;
+    }
+    .nav-links a:hover {background: rgba(255,255,255,0.2);}
+    .container {
+        width: 60%;
+        margin: auto;
+        margin-top: 110px;
+        background: rgba(255,255,255,0.95);
+        padding: 30px;
+        border-radius: 18px;
+        box-shadow: 0 15px 40px rgba(0,0,0,0.12);
+        text-align: center;
+    }
+    .title {
+        font-size: 24px;  font-weight: 600;
+        color: #2c3e50; margin-bottom: 15px;
+    }
+    .instructions {
+        background: #f1f5ff;
+        padding: 12px;
+        border-radius: 10px;
+        font-size: 14px;
+        color: #444;
+        margin-bottom: 40px;
+    }
+    textarea {
+        width: 100%;     height: 80px;  padding: 12px;
+        font-size: 14px; transition: 0.3s;
+        border-radius: 10px; border: 1px solid #dcdcdc;
+    }
 
-        .nav-title {
-            color: white;
-            font-size: 24px;
-            font-weight: bold;
-        }
-        
-        .nav-links a {
-            color: rgb(255, 255, 255);
-            text-decoration: none;
-            font-size: 22px;
-            padding: 8px 40px;
-            border-radius: 6px;
-            transition: 0.3s;
-        }
+    textarea:focus {
+        border: 1px solid #4f6df5;
+        box-shadow: 0 0 10px rgba(79,109,245,0.25);
+        outline: none;
+    }
+    .controls {display: flex; gap: 10px; margin-top: 15px;}
+    select {flex: 1; padding: 10px; border-radius: 10px; border: 1px solid #ccc;}
+    button {flex: 1;     padding: 12px;
+        font-size: 15px; color: white;
+        border: none;    border-radius: 10px;
+        cursor: pointer; transition: 0.3s;
+        background: linear-gradient(135deg, #4f6df5, #6c8cff);
+    }
+    button:hover {transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,0.2); }
+    .toast {
+        position: fixed;
+        top: 60px;
+        left: 50%;
+        transform: translate(-50%, -40px);
+        min-width: 300px;
+        max-width: 90%;
+        padding: 14px;
+        border-radius: 10px;
+        color: white;
+        font-size: 14px;
+        background: #e74c3c;
+        opacity: 0;
+        transition: 0.4s;
+        z-index: 9999;
+    }
+    .toast.show {opacity: 1; transform: translate(-50%, 0);}
+    .toast.success { background: #2ecc71; }
+    .toast.error { background: #e74c3c; }
+    .modal {
+        display: none;
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.4);
+    }
+    .modal-box {
+        background: white;
+        width: 300px;
+        padding: 25px;
+        margin: 120px auto;
+        border-radius: 12px;
+        text-align: center;
+    }
 
-        .nav-links a:hover {
-            background: rgba(255, 255, 255, 0.578);
-            color: black;
-        }
+    .modal-box input {
+        width: 100%;
+        padding: 10px;
+        margin: 8px 0;
+        border-radius: 8px;
+        border: 1px solid #ccc;
+    }
 
-        .container {
-            width: 65%;
-            margin: auto;
-            margin-top: 150px;
-            background: white;
-            padding: 40px;
-            border-radius: 14px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.379);
-            text-align: center;
-        }
+    .footer {
+        color: yellow;
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+        text-align: center;
+        background: linear-gradient(135deg, #4f6df5d3, #6c8cffd0);
+        font-size: 18px;
+        font-weight: 600;
+        margin-top: 20px;
+    }
 
-        .title {
-            font-size: 28px;
-            font-weight: bold;
-            background: #f7f9fc;
-            color: #444;
-            padding: 15px;
-            border-radius: 8px;
-            width: 85%;
-            display:inline-block;
-        }
-
-        .subtitle {color: #555; margin-bottom: 30px;}
-
-        textarea {
-            width: 85%;
-            height: 65px;
-            font-size: 15px;
-            padding: 12px;
-            border-radius: 8px;
-            border: 1px solid #ccc;
-            resize: none;
-            outline: none;
-        }
-
-        textarea:focus {
-            border: 1px solid #3785ea;
-            box-shadow: 0 0 5px rgba(55, 133, 234, 0.4);
-        }
-
-        .instructions {
-            width: 85%;
-            background: #f7f9fc;
-            color: #444;
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            font-size: 14px;
-            display:inline-block;
-        }
-
-        .controls {
-            width: 89%;
-            margin: auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 15px;
-        }
-
-        select {
-            padding: 10px;
-            border-radius: 8px;
-            border: 1px solid #ccc;
-            font-size: 14px;
-            width: 48%;
-        }
-
-        button {
-            padding: 12px 28px;
-            font-size: 16px;
-            background: #4f6df5;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-        }
-
-        .predict_btn {width: 48%;}
-
-        button:hover {background: #2f4de0;}
-
-        .toast {
-            position: fixed;
-            top: 20px;
-            left: 31%;
-            transform: translate(0%, -40px);
-            min-width: 35%;
-            padding: 18px 20px;
-            text-align: center;
-            border-radius: 10px;
-            color: white;
-            font-size: 18px;
-            background: #e74c3c;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
-            opacity: 0;
-            transition: all 0.4s ease;
-            z-index: 1000;
-        }
-
-        .toast.show {opacity: 1; transform: translate(0%, 0);}
-        .toast.success {background: #2ecc71;}
-        .toast.error {background: #e74c3c;}
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 2000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.4);
-        }
-
-        .modal-box {
-            background: white;
-            width: 300px;
-            padding: 30px;
-            margin: 120px auto;
-            border-radius: 12px;
-            text-align: center;
-            position: relative;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-        }
-        .modal-box h2 {margin-bottom: 20px;}
-        .modal-box input {
-            width: 90%;
-            padding: 10px;
-            margin: 10px 0;
-            border-radius: 6px;
-            border: 1px solid #ccc;
-        }
-
-        .modal-box button {width: 95%; margin-top: 10px;}
-        .close {
-            position: absolute;
-            top: 10px;
-            right: 15px;
-            font-size: 22px;
-            cursor: pointer;
-        }
+    @media (max-width: 768px) {
+        .navbar {flex-direction: column; align-items: flex-start; }
+        .nav-title {font-size: 18px; margin-bottom: 5px; }
+        .nav-links {width: 100%; display: flex; justify-content: space-between;}
+        .container {width: 92%; padding: 20px; border-radius: 16px;}
+        .title {font-size: 18px;}
+        textarea {height: 90px;}
+        .controls {flex-direction: column;}
+        button {width: 100%;}
+        select {width: 100%;}
+    }
+    @media (max-width: 768px) {
+        .footer {font-size: 12px; padding: 10px;}
+    }
     </style>
 </head>
 
@@ -265,7 +228,13 @@
         </form>
         <form action="/admin_login" method="post"></form>
     </div>
+    </div>
 
+    <footer class="footer">
+        <p>© 2026 AI Health Prediction System | Developed by HPLABZz</p>
+    </footer>
+
+</body>
     <script>
         function showToast(message, type="error") {
             let toast = document.getElementById("toast");

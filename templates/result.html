@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
-
 <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Prediction Result</title>
     <style>
         body {
@@ -130,6 +130,80 @@
             padding: 8px 14px;
             border-radius: 8px;
             display: inline-block;
+        }
+        
+        @media (max-width: 768px) {
+
+            body {
+                padding: 15px;
+            }
+
+            .container {
+                padding: 20px;
+                max-width: 100%;
+            }
+
+            .title {
+                font-size: 22px;
+                text-align: center;
+            }
+
+            .patient-id {
+                display: block;
+                margin: 10px auto;
+                text-align: center;
+                font-size: 14px;
+            }
+
+            .grid {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .riskLevelcard {
+                padding: 10px 15px;
+            }
+
+            .card-header p {
+                font-size: 16px;
+            }
+
+            .percent {
+                font-size: 22px;
+            }
+
+            .badge {
+                font-size: 12px;
+                padding: 5px 10px;
+            }
+
+            .recommendation-grid {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .recommendation-card {
+                padding: 15px;
+            }
+
+            ul {
+                padding-left: 18px;
+            }
+
+            li {
+                font-size: 14px;
+            }
+
+            .buttons {
+                text-align: center;
+            }
+
+            button {
+                width: 100%;
+                margin-bottom: 10px;
+                font-size: 15px;
+                padding: 12px;
+            }
         }
     </style>
 </head>
