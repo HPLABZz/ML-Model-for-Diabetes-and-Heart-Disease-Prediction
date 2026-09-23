@@ -1,9 +1,7 @@
-/* RESET */
 * {
     box-sizing: border-box;
 }
 
-/* BODY */
 body {
     font-family: 'Segoe UI', Arial, sans-serif;
     background: linear-gradient(135deg, #eef2f7, #dfe7f5);
@@ -11,7 +9,6 @@ body {
     padding: 0;
 }
 
-/* NAVBAR */
 .navbar {
     width: 100%;
     background: linear-gradient(135deg, #4f6df5, #6c8cff);
@@ -45,7 +42,6 @@ body {
     background: rgba(255,255,255,0.2);
 }
 
-/* CONTAINER (CARD STYLE) */
 .container {
     width: 55%;
     margin: auto;
@@ -57,7 +53,6 @@ body {
     text-align: center;
 }
 
-/* TITLE */
 .title {
     font-size: 24px;
     font-weight: 600;
@@ -65,7 +60,6 @@ body {
     margin-bottom: 15px;
 }
 
-/* INSTRUCTIONS */
 .instructions {
     background: #f1f5ff;
     padding: 12px;
@@ -75,7 +69,6 @@ body {
     margin-bottom: 20px;
 }
 
-/* TEXTAREA */
 textarea {
     width: 100%;
     height: 80px;
@@ -92,14 +85,12 @@ textarea:focus {
     outline: none;
 }
 
-/* CONTROLS */
 .controls {
     display: flex;
     gap: 10px;
     margin-top: 15px;
 }
 
-/* SELECT */
 select {
     flex: 1;
     padding: 10px;
@@ -107,7 +98,6 @@ select {
     border: 1px solid #ccc;
 }
 
-/* BUTTON */
 button {
     flex: 1;
     padding: 12px;
@@ -150,7 +140,6 @@ button:hover {
 .toast.success { background: #2ecc71; }
 .toast.error { background: #e74c3c; }
 
-/* MODAL */
 .modal {
     display: none;
     position: fixed;
@@ -176,7 +165,6 @@ button:hover {
     border: 1px solid #ccc;
 }
 
-/* 🔥 MOBILE (CARD STYLE UI) */
 @media (max-width: 768px) {
 
     .navbar {
